@@ -1,0 +1,21 @@
+<div class="container">
+    <div *ngFor="let item of data | keyvalue" class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ header['2. Symbol'] }}</h5>
+        <p class="card-text">{{ header['1. Information'] }}</p>
+        <p class="card-text">Open: R$ {{ item.value['1. open'] }}</p>
+        <p class="card-text">High: R$ {{ item.value['2. high'] }}</p>
+        <p class="card-text">Low: R$ {{ item.value['3. low'] }}</p>
+        <p class="card-text">Close: R$ {{ item.value['4. close'] }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- <div class="container">
+    <div *ngFor="let item of header | keyvalue" class="card">
+      <div class="card-body">
+        <h5 class="card-title">Title:{{ item.value['1. Information'] }}</h5>
+        <p class="card-text">Symbol: {{ item.value['2. Symbol'] }}</p>
+      </div>
+    </div>
+  </div> -->
