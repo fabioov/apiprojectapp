@@ -6,14 +6,16 @@
 <div class="container">
   <div class="searchInput" [class.active]="isSearchActive">
     <input
-      type="search"
-      placeholder="What are you looking for?"
+      type="text"
+      placeholder="What stock are you looking for?"
+      autocomplete="off"
       (keyup)="onKeyUp($event)"
       (focus)="isSearchActive = true"
+      #inputField
     />
-    <div *ngFor="let value of companyTicker" class="resultBox">
+    <div *ngFor="let value of companyTicker" class="resultBox" (click)="onResultBoxClick(value)">
       <p>{{ value["1. symbol"] }} - {{ value["2. name"] }}</p>
     </div>
-    <div class="icon"><i class="fas fa-search"></i></div>
+    <div class="icon" (click)="onButtonClick($event)"><i class="fas fa-search"></i></div>
   </div>
 </div>
