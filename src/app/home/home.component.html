@@ -1,47 +1,19 @@
-<!-- <div class="container">
-    <div *ngFor="let item of data | keyvalue" class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ header['2. Symbol'] }}</h5>
-        <p class="card-text">{{ header['1. Information'] }}</p>
-        <p class="card-text">Open: R$ {{ item.value['1. open'] }}</p>
-        <p class="card-text">High: R$ {{ item.value['2. high'] }}</p>
-        <p class="card-text">Low: R$ {{ item.value['3. low'] }}</p>
-        <p class="card-text">Close: R$ {{ item.value['4. close'] }}</p>
-      </div>
-    </div>
-  </div> -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+/>
 
 <div class="container">
-  <div>
-    <form class="form-inline my-2 my-lg-0">
-      <input
-        (keyup)="onKeyUp($event)"
-        class="form-control mr-sm-2"
-        type="text"
-        placeholder="Search"
-        aria-label="Search"
-      />
-      <button class="btn btn-outline-success my-2 my-sm-0" type="button">
-        Search
-      </button>
-    </form>
-  </div>
- 
-  <div *ngFor="let value of companyTicker" class="card">
-    <div class="card-body">
-      <div class="item">
-        <p class="card-text">{{ value['1. symbol'] }}</p>
-        <p class="card-text">{{ value['2. name'] }}</p>
-        <p class="card-text">{{ value['4. region'] }}</p>
-      </div>
+  <div class="searchInput" [class.active]="isSearchActive">
+    <input
+      type="search"
+      placeholder="What are you looking for?"
+      (keyup)="onKeyUp($event)"
+      (focus)="isSearchActive = true"
+    />
+    <div *ngFor="let value of companyTicker" class="resultBox">
+      <p>{{ value["1. symbol"] }} - {{ value["2. name"] }}</p>
     </div>
+    <div class="icon"><i class="fas fa-search"></i></div>
   </div>
-
-  <!-- <h5 class="card-title">{{ header["2. Symbol"] }}</h5>
-      <p class="card-text">{{ header["1. Information"] }}</p>
-      <p class="card-text">Date: {{ this.date }}</p>
-      <p class="card-text">Open: R$ {{ daily["1. open"] }}</p>
-      <p class="card-text">High: R$ {{ daily["2. high"] }}</p>
-      <p class="card-text">Low: R$ {{ daily["3. low"] }}</p>
-      <p class="card-text">Close: R$ {{ daily["4. close"] }}</p> -->
 </div>

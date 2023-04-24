@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   symbol: string = '';
   searchQuery: string = '';
   companyTicker: any[];
+  isSearchActive = false;
 
   constructor(
     public dataService: DataService // add SymbolSearchService dependency
