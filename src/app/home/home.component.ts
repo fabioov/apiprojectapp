@@ -8,6 +8,18 @@ type Header = {
   '1. Information': string;
 };
 
+interface CompanyInfo {
+  '1. symbol': string;
+  '2. name': string;
+  '3. type': string;
+  '4. region': string;
+  '5. marketOpen': string;
+  '6. marketClose': string;
+  '7. timezone': string;
+  '8. currency': string;
+  '9. matchScore': string;
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -19,13 +31,15 @@ export class HomeComponent implements OnInit {
   header: Header;
   data: { [key: string]: any };
   companySearch: { [key: string]: any };
-  daily: any;
+  daily: { [key: string]: any };
   date: string;
   dateFormatted: string;
   symbol: string = '';
   searchQuery: string = '';
   companyTicker: any[];
   isSearchActive = false;
+  message: string = '';
+  companyInfoData: CompanyInfo;
 
   constructor(
     public dataService: DataService // add SymbolSearchService dependency
@@ -36,13 +50,13 @@ export class HomeComponent implements OnInit {
   onButtonClick(item: any) {
     // Here, you can use the value of the symbol variable
     const inputValue = this.inputField.nativeElement.value.replace(/\s/g, '');
-    const compTick = inputValue.split("-");
+    const compTick = inputValue.split('-');
 
     if (inputValue) {
       this.symbol = compTick[0];
       // You can also pass it to a method in your DataService to fetch data for that symbol
       this.dataService.getNews(this.symbol).subscribe((result: any) => {
-        debugger
+        debugger;
         this.handleResult(result);
       });
     }
@@ -50,18 +64,21 @@ export class HomeComponent implements OnInit {
 
   handleResult(result: any) {
     this.data = result['Time Series (Daily)'];
-        const date = '2023-03-17';
-        this.daily = this.data[date];
-        this.date = moment(date).format('DD-MM-YYYY');
-        this.header = result['Meta Data'];
-        console.log('This is the data: ', this.data);
-        console.log('This is the header: ', this.header);
-        if (this.daily === undefined ) {
-          console.log(`This set of data does not contain the date ${this.date}!`);
-        }else {
-        console.log(`This is the daily:, ${this.daily}`);
-        }
-        debugger
+    const date = '2022-11-29';
+    this.daily = this.data[date];
+    this.date = moment(date).format('DD-MM-YYYY');
+    this.header = result['Meta Data'];
+    console.log('This is the data: ', this.data);
+    console.log('This is the header: ', this.header);
+    if (this.daily === undefined) {
+      this.message = `This set of data does not contain the date ${this.date}!`;
+    } else {
+     this.message = `Open: US$ ${ this.daily["1. open"] }<br>
+                 High: US$ ${ this.daily["2. high"] }<br>
+                 Low: US$ ${ this.daily["3. low"] }<br>
+                 Close: US$ ${ this.daily["4. close"] }`;
+    }
+    debugger;
   }
 
   onKeyUp(companyName: any) {
@@ -72,7 +89,7 @@ export class HomeComponent implements OnInit {
     } else {
       console.log('Fetching company data for:', companyName.target.value);
       this.searchQuery = companyName.target.value;
-
+      
       this.dataService.getCompany(this.searchQuery).subscribe((search: any) => {
         console.log('Received data:', search);
         this.companyTicker = search['bestMatches'];
@@ -81,7 +98,8 @@ export class HomeComponent implements OnInit {
   }
 
   onResultBoxClick(item: any) {
-    console.log(item);
+    this.companyInfoData = item;
+    console.log(this.companyInfoData);
     const searchInput = document.querySelector(
       '.searchInput input'
     ) as HTMLInputElement;

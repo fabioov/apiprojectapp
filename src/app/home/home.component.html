@@ -13,9 +13,42 @@
       (focus)="isSearchActive = true"
       #inputField
     />
-    <div *ngFor="let value of companyTicker" class="resultBox" (click)="onResultBoxClick(value)">
+    <div
+      *ngFor="let value of companyTicker"
+      class="resultBox"
+      (click)="onResultBoxClick(value)"
+    >
       <p>{{ value["1. symbol"] }} - {{ value["2. name"] }}</p>
     </div>
-    <div class="icon" (click)="onButtonClick($event)"><i class="fas fa-search"></i></div>
+    <div class="icon" (click)="onButtonClick($event)">
+      <i class="fas fa-search"></i>
+    </div>
+  </div>
+  <div class="card">
+    <mat-card class="image-card">
+      <mat-card-header>
+        <div mat-card-avatar class="header-image-avatar"></div>
+        <ng-container *ngIf="companyInfoData">
+        <mat-card-title>{{ companyInfoData["2. name"] }}</mat-card-title>
+      </ng-container>
+    </mat-card-header>
+      <ng-container *ngIf="companyInfoData">
+        <mat-card-subtitle>{{ companyInfoData["1. symbol"] }}</mat-card-subtitle>
+      </ng-container>
+      
+      <mat-card-content>
+        <p>
+          <img
+            class="img"
+            mat-card-image
+            src="/assets/img/Stock Pic.jpeg"
+            alt="Angular material Card"
+          />
+          <ng-container>
+            <p [innerHTML]="message"></p>
+          </ng-container>
+        </mat-card-content
+      >
+    </mat-card>
   </div>
 </div>
