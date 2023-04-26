@@ -29,7 +29,7 @@
             <mat-calendar [(selected)]="selected"></mat-calendar>
     </mat-card>
   </div>
-  <div *ngIf="showCard" class="card">
+  <div *ngIf="showCard && !isSearchActive" class="card">
     <mat-card class="image-card">
       <mat-card-header>
         <div mat-card-avatar class="header-image-avatar"></div>

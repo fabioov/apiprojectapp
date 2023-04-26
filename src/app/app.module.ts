@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatButtonModule} from '@angular/material/button';
 
 
 
@@ -30,7 +31,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     BrowserAnimationsModule,
     MatCardModule,
     MatNativeDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -33,7 +33,6 @@ export class HomeComponent implements OnInit {
   companySearch: { [key: string]: any };
   daily: { [key: string]: any };
   date: string;
-  dateFormatted: string;
   symbol: string = '';
   searchQuery: string = '';
   companyTicker: any[];
@@ -69,9 +68,11 @@ export class HomeComponent implements OnInit {
 
   handleResult(result: any) {
     this.data = result['Time Series (Daily)'];
-    const date = '2022-11-29';
-    this.daily = this.data[date];
-    this.date = moment(date).format('DD-MM-YYYY');
+    const date = this.selected;
+    debugger;
+    const dateFormatted = moment(this.selected).format('YYYY-MM-DD');
+    this.daily = this.data[dateFormatted];
+    this.date = moment(dateFormatted).format('DD-MM-YYYY');
     this.header = result['Meta Data'];
     console.log('This is the data: ', this.data);
     console.log('This is the header: ', this.header);
