@@ -24,18 +24,23 @@
       <i class="fas fa-search"></i>
     </div>
   </div>
-  <div class="card">
+  <div *ngIf="showCalendar"class="calendar">
+    <mat-card class="demo-inline-calendar-card">
+            <mat-calendar [(selected)]="selected"></mat-calendar>
+    </mat-card>
+  </div>
+  <div *ngIf="showCard" class="card">
     <mat-card class="image-card">
       <mat-card-header>
         <div mat-card-avatar class="header-image-avatar"></div>
-        <ng-container *ngIf="companyInfoData">
-        <mat-card-title>{{ companyInfoData["2. name"] }}</mat-card-title>
-      </ng-container>
-    </mat-card-header>
-      <ng-container *ngIf="companyInfoData">
-        <mat-card-subtitle>{{ companyInfoData["1. symbol"] }}</mat-card-subtitle>
-      </ng-container>
-      
+        <mat-card-title *ngIf="companyInfoData">{{
+          companyInfoData["2. name"]
+        }}</mat-card-title
+        ><br />
+        <mat-card-subtitle *ngIf="companyInfoData">{{
+          companyInfoData["1. symbol"]
+        }}</mat-card-subtitle>
+      </mat-card-header>
       <mat-card-content>
         <p>
           <img
@@ -46,9 +51,8 @@
           />
           <ng-container>
             <p [innerHTML]="message"></p>
-          </ng-container>
-        </mat-card-content
-      >
+          </ng-container></p
+      ></mat-card-content>
     </mat-card>
   </div>
 </div>

@@ -99,3 +99,13 @@ body{
 .mat-card-subtitle {
   margin-top: -10px;
 }
+
+.calendar {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.demo-inline-calendar-card {
+  width: 300px;
+}

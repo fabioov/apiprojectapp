@@ -40,6 +40,9 @@ export class HomeComponent implements OnInit {
   isSearchActive = false;
   message: string = '';
   companyInfoData: CompanyInfo;
+  showCard = false;
+  showCalendar = false;
+  selected: Date | null;
 
   constructor(
     public dataService: DataService // add SymbolSearchService dependency
@@ -49,6 +52,8 @@ export class HomeComponent implements OnInit {
 
   onButtonClick(item: any) {
     // Here, you can use the value of the symbol variable
+    this.showCard = true;
+    this.showCalendar = false;
     const inputValue = this.inputField.nativeElement.value.replace(/\s/g, '');
     const compTick = inputValue.split('-');
 
@@ -73,23 +78,23 @@ export class HomeComponent implements OnInit {
     if (this.daily === undefined) {
       this.message = `This set of data does not contain the date ${this.date}!`;
     } else {
-     this.message = `Open: US$ ${ this.daily["1. open"] }<br>
-                 High: US$ ${ this.daily["2. high"] }<br>
-                 Low: US$ ${ this.daily["3. low"] }<br>
-                 Close: US$ ${ this.daily["4. close"] }`;
+      this.message = `Open: US$ ${this.daily['1. open']}<br>
+                 High: US$ ${this.daily['2. high']}<br>
+                 Low: US$ ${this.daily['3. low']}<br>
+                 Close: US$ ${this.daily['4. close']}`;
     }
-    debugger;
   }
 
   onKeyUp(companyName: any) {
-    debugger;
+    this.showCard = false;
+    this.showCalendar = false;
     if (!companyName.target.value) {
       console.log('Clearing companyTicker array');
       this.companyTicker = [];
     } else {
       console.log('Fetching company data for:', companyName.target.value);
       this.searchQuery = companyName.target.value;
-      
+
       this.dataService.getCompany(this.searchQuery).subscribe((search: any) => {
         console.log('Received data:', search);
         this.companyTicker = search['bestMatches'];
@@ -98,6 +103,7 @@ export class HomeComponent implements OnInit {
   }
 
   onResultBoxClick(item: any) {
+    this.showCalendar = true;
     this.companyInfoData = item;
     console.log(this.companyInfoData);
     const searchInput = document.querySelector(
