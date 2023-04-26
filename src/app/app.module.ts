@@ -12,15 +12,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import {MatButtonModule} from '@angular/material/button';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MAT_MDC_DIALOG_DATA } from './home/constants';
+import { MyDialogComponent } from './my-dialog/my-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    MyDialogComponent
   ],
   imports: [
     CommonModule,
@@ -32,9 +36,13 @@ import {MatButtonModule} from '@angular/material/button';
     MatCardModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_MDC_DIALOG_DATA, useValue: {} }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

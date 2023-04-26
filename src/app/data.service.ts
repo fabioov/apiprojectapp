@@ -13,6 +13,8 @@ type SymbolSearch = {
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class DataService {
 
   constructor(private http: HttpClient) { }
