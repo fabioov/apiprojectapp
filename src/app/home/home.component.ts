@@ -8,16 +8,15 @@ type Header = {
   '1. Information': string;
 };
 
-interface CompanyInfo {
-  '1. symbol': string;
-  '2. name': string;
-  '3. type': string;
-  '4. region': string;
-  '5. marketOpen': string;
-  '6. marketClose': string;
-  '7. timezone': string;
-  '8. currency': string;
-  '9. matchScore': string;
+interface CompanyProfile {
+  name: string;
+  ticker: string;
+  country: string;
+  currency: string;
+  ipo: string;
+  logo: any;
+  weburl: string;
+  exchange: string;
 }
 
 @Component({
@@ -38,7 +37,7 @@ export class HomeComponent implements OnInit {
   companyTicker: any[];
   isSearchActive = false;
   message: string = '';
-  companyInfoData: CompanyInfo;
+  companyInfoData: CompanyProfile;
   showCard = false;
   showCalendar = false;
   selected: Date | null;
@@ -53,20 +52,44 @@ export class HomeComponent implements OnInit {
     // Here, you can use the value of the symbol variable
     this.showCard = true;
     this.showCalendar = false;
+
     const inputValue = this.inputField.nativeElement.value.replace(/\s/g, '');
     const compTick = inputValue.split('-');
 
     if (inputValue) {
       this.symbol = compTick[0];
       // You can also pass it to a method in your DataService to fetch data for that symbol
-      this.dataService.getNews(this.symbol).subscribe((result: any) => {
-        debugger;
-        this.handleResult(result);
+      this.dataService.getCompanyProfile(this.symbol).subscribe({
+        next: (profile: any) => {
+          console.log('Received Company Profile data:', profile);
+          this.handleProfile(profile);
+        },
+
+        error: (error: any) => {
+          console.log('Error', error);
+        },
       });
+
+      this.dataService.getStockPrices(this.symbol).subscribe(
+        (prices: any) => {
+          console.log('Received Stock data:', prices);
+          this.handleStockPrices(prices);
+        },
+        (error: any) => {
+          console.log('Error', error);
+        }
+      );
+      debugger;
     }
   }
 
-  handleResult(result: any) {
+  handleProfile(result: any) {
+    this.companyInfoData = result;
+    console.log('This is the test for Profile data', this.companyInfoData);
+    debugger;
+  }
+
+  handleStockPrices(result: any) {
     this.data = result['Time Series (Daily)'];
     const date = this.selected;
     debugger;
@@ -96,10 +119,14 @@ export class HomeComponent implements OnInit {
       console.log('Fetching company data for:', companyName.target.value);
       this.searchQuery = companyName.target.value;
 
-      this.dataService.getCompany(this.searchQuery).subscribe((search: any) => {
-        console.log('Received data:', search);
-        this.companyTicker = search['bestMatches'];
-      });
+      // this.dataService.getCompany(this.searchQuery).subscribe((search: any) => {
+      //   console.log('Received data:', search);
+      this.dataService
+        .getSymbolList(this.searchQuery)
+        .subscribe((search: any) => {
+          console.log('Received Symbol data:', search);
+          this.companyTicker = search['result'];
+        });
     }
   }
 
@@ -110,7 +137,7 @@ export class HomeComponent implements OnInit {
     const searchInput = document.querySelector(
       '.searchInput input'
     ) as HTMLInputElement;
-    searchInput.value = `${item['1. symbol']} - ${item['2. name']}`;
+    searchInput.value = `${item['displaySymbol']} - ${item['description']}`;
     this.isSearchActive = false;
   }
 }
