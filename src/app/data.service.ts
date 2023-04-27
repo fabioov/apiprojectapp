@@ -46,7 +46,7 @@ export class DataService {
   }
   // FINNHUB API
   getCompanyProfile(profile: string): Observable<Profile> {
-    const url = `https://finnhub.io/api/v1/quote?symbol=${profile}&limit=20&token=cgvi7j9r01qqk0dokcigcgvi7j9r01qqk0dokcj0`;
+    const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${profile}&limit=20&token=cgvi7j9r01qqk0dokcigcgvi7j9r01qqk0dokcj0`;
     return this.http.get<Profile>(url).pipe(
       catchError((error: any) => {
         console.error('Error fetching company profile:', error);
