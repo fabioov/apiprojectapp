@@ -13,6 +13,7 @@
       (focus)="isSearchActive = true"
       #inputField
     />
+    <mat-progress-bar mode="indeterminate" *ngIf="progress"></mat-progress-bar>
     <div
       *ngFor="let value of companyTicker"
       class="resultBox"

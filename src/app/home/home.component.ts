@@ -41,6 +41,7 @@ export class HomeComponent implements OnInit {
   showCard = false;
   showCalendar = false;
   selected: Date | null;
+  progress = false;
 
   constructor(
     public dataService: DataService // add SymbolSearchService dependency
@@ -52,6 +53,7 @@ export class HomeComponent implements OnInit {
     // Here, you can use the value of the symbol variable
     this.showCard = true;
     this.showCalendar = false;
+    this.progress = true;
 
     const inputValue = this.inputField.nativeElement.value.replace(/\s/g, '');
     const compTick = inputValue.split('-');
@@ -63,22 +65,26 @@ export class HomeComponent implements OnInit {
         next: (profile: any) => {
           console.log('Received Company Profile data:', profile);
           this.handleProfile(profile);
+          this.progress = false;
         },
 
         error: (error: any) => {
           console.log('Error', error);
+          this.progress = false;
         },
       });
 
-      this.dataService.getStockPrices(this.symbol).subscribe(
-        (prices: any) => {
+      this.dataService.getStockPrices(this.symbol).subscribe({
+        next: (prices: any) => {
           console.log('Received Stock data:', prices);
           this.handleStockPrices(prices);
+          this.progress = false;
         },
-        (error: any) => {
+        error: (error: any) => {
           console.log('Error', error);
-        }
-      );
+          this.progress = false;
+        },
+      });
       debugger;
     }
   }

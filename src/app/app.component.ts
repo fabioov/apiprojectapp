@@ -24,12 +24,16 @@ export class AppComponent {
   symbol: any;
   fromDate: any;
   toDate: any;
+  isSignUp: boolean = false;
 
   constructor(private dataService: DataService, public dialog: MatDialog) {}
 
+  ngOnInit(): void {}
+
   openDialog(): void {
     const dialogRef = this.dialog.open(MyDialogComponent, {
-      width: '250px',
+      width: '500px',
+      data: { isSignUp: this.isSignUp }
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -37,15 +41,16 @@ export class AppComponent {
     });
   }
 
-  ngOnInit(): void {}
-
   logInOnClick() {
+    this.isSignUp = false;
     console.log('LogIn button working fine!');
     this.openDialog();
   }
 
   signUpOnClick() {
+    this.isSignUp = true;
     debugger;
+    this.openDialog();
     this.symbol = 'AAPL';
     console.log('SingUp button working fine!');
     this.dataService.getCompanyProfile(this.symbol).subscribe((search: any) => {
