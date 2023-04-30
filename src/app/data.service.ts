@@ -85,11 +85,13 @@ export class DataService {
 
   getCompanyNews(
     companyNews: string,
-    fromDate: Date,
-    toDate: Date
+    fromDate: string,
+    toDate: string
   ): Observable<CompanyNews> {
+    debugger;
     const url = `https://finnhub.io/api/v1/company-news?symbol=${companyNews}&from=${fromDate}&to=${toDate}&token=cgvi7j9r01qqk0dokcigcgvi7j9r01qqk0dokcj0`;
     return this.http.get<CompanyNews>(url).pipe(
+
       catchError((error: any) => {
         this.errorCatch = error;
         return throwError(() => new Error(this.errorCatch));

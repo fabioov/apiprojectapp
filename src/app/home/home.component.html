@@ -33,33 +33,69 @@
   <div *ngIf="showCard && !isSearchActive" class="card">
     <mat-card class="image-card">
       <ng-container *ngIf="noProfileData === false">
-      <mat-card-header>
-         <div mat-card-avatar class="header-image-avatar">
-          <img
-            class="img"
-            mat-card-image
-            [src]="companyInfoData['logo']"
-            alt="Angular material Card"
-          />
-        </div>
-        <mat-card-title *ngIf="companyInfoData">{{
-          companyInfoData["name"]
-        }}</mat-card-title
-        ><br />
-        <mat-card-subtitle *ngIf="companyInfoData">{{
-          companyInfoData["ticker"]
-        }}</mat-card-subtitle>
-      </mat-card-header>
-    </ng-container>
-    <!-- Display message if companyInfoData is empty -->
-<div *ngIf="noProfileData === true">
-  <p [innerHTML]="message"></p>
-</div>
-    <ng-container *ngIf="noProfileData === false">
+        <mat-card-header>
+          <div mat-card-avatar class="header-image-avatar">
+            <img
+              class="img"
+              mat-card-image
+              [src]="companyInfoData['logo']"
+              alt="Angular material Card"
+            />
+          </div>
+          <mat-card-title *ngIf="companyInfoData">{{
+            companyInfoData["name"]
+          }}</mat-card-title
+          ><br />
+          <mat-card-subtitle *ngIf="companyInfoData">{{
+            companyInfoData["ticker"]
+          }}</mat-card-subtitle>
+        </mat-card-header>
+      </ng-container>
+      <!-- Display message if companyInfoData is empty -->
+      <div *ngIf="noProfileData === true">
+        <p [innerHTML]="profileMessage"></p>
+      </div>
       <mat-card-content>
-        <p [innerHTML]="message"></p>
+        <ng-container *ngIf="noProfileData === false">
+          <p [innerHTML]="profileMessage"></p>
+        </ng-container>
+
+        <ng-container *ngIf="noStockPriceData === false">
+          <mat-card-title>
+            <p>Latest Stock Prices</p>
+          </mat-card-title>
+          <p [innerHTML]="stockPriceMessage"></p>
+        </ng-container>
+        <div *ngIf="noStockPriceData === true">
+          <p [innerHTML]="stockPriceMessage"></p>
+        </div>
       </mat-card-content>
-    </ng-container>
+    </mat-card>
+    
+  </div>
+  <div>
+    <mat-card *ngFor="let oneNews of news" class="newsCard">
+      <mat-card-header>
+        <mat-card-title>
+          {{ oneNews["headline"] }} </mat-card-title
+        ><br />
+        <mat-card-subtitle>
+          {{ oneNews["summary"] }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <img
+        class="img"
+        mat-card-image
+        [src]="oneNews['image']"
+        alt="News Image"
+        (error)="onImageError($event)"
+      />
+      <mat-card-content>
+        <p>Source: {{ oneNews["source"] }}</p>
+        <p>
+          <a href="{{ oneNews['url'] }}" target="_blank">Go to the news page</a>
+        </p>
+      </mat-card-content>
     </mat-card>
   </div>
 </div>
