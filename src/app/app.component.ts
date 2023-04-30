@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DataService } from './data.service';
+import { AuthService } from './auth.service';
 import {
   MatDialog,
   MatDialogRef,
@@ -25,15 +26,17 @@ export class AppComponent {
   fromDate: any;
   toDate: any;
   isSignUp: boolean = false;
+  isSignedIn: boolean = false;
 
-  constructor(private dataService: DataService, public dialog: MatDialog) {}
+  constructor(private dataService: DataService, public authService: AuthService, public dialog: MatDialog) {}
 
   ngOnInit(): void {}
 
   openDialog(): void {
     const dialogRef = this.dialog.open(MyDialogComponent, {
       width: '500px',
-      data: { isSignUp: this.isSignUp }
+      data: { isSignUp:   this.isSignUp,
+              isSignedIn: this.isSignedIn }
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -50,33 +53,38 @@ export class AppComponent {
   signUpOnClick() {
     this.isSignUp = true;
     debugger;
+
     this.openDialog();
-    this.symbol = 'AAPL';
-    console.log('SingUp button working fine!');
-    this.dataService.getCompanyProfile(this.symbol).subscribe((search: any) => {
-      console.log('Received Company Profile data:', search);
-      this.companyProfile = search;
-    });
-    this.dataService.getSymbolList(this.symbol).subscribe((search: any) => {
-      console.log('Received Symbol data:', search);
-      this.symbolList = search;
-    });
 
-    this.dataService.getStockPrices(this.symbol).subscribe((search: any) => {
-      console.log('Received Stock data:', search);
-      this.stockPrices = search;
-    });
+    // this.symbol = 'AAPL';
+    // console.log('SingUp button working fine!');
+    // this.dataService.getCompanyProfile(this.symbol).subscribe((search: any) => {
+    //   console.log('Received Company Profile data:', search);
+    //   this.companyProfile = search;
+    // });
+    // this.dataService.getSymbolList(this.symbol).subscribe((search: any) => {
+    //   console.log('Received Symbol data:', search);
+    //   this.symbolList = search;
+    // });
 
-    this.fromDate = '2023-01-01';
-    this.toDate = '2023-04-01';
-    this.dataService.getCompanyNews(this.symbol, this.fromDate, this.toDate).subscribe((search: any) => {
-      console.log('Received Company News:', search);
-      this.companyNews = search;
-    });
-    debugger;
+    // this.dataService.getStockPrices(this.symbol).subscribe((search: any) => {
+    //   console.log('Received Stock data:', search);
+    //   this.stockPrices = search;
+    // });
+
+    // this.fromDate = '2023-01-01';
+    // this.toDate = '2023-04-01';
+    // this.dataService.getCompanyNews(this.symbol, this.fromDate, this.toDate).subscribe((search: any) => {
+    //   console.log('Received Company News:', search);
+    //   this.companyNews = search;
+    // });
+    // debugger;
   }
 
   signOutOnClick() {
+debugger
+console.log("button");
+    this.authService.isSignedIn = false;
     
   }
 }

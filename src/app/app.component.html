@@ -35,15 +35,15 @@
           </ul>
         </div>
       </div>
-      <div class="example-button-row">
+      <div class="example-button-row" *ngIf="authService.isSignedIn">
         <button mat-stroked-button color="warn"(click)="signOutOnClick()"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
       </div>
-      <div class="example-button-container">
+      <div class="example-button-container" *ngIf="authService.isSignedIn">
         <button mat-fab disabled aria-label="Example icon button with a heart icon">
-          <mat-icon>favorite</mat-icon>
+          <mat-icon><img src="./assets/img/minimalist-logo-maker-for-developers-2374.png"/></mat-icon>
         </button>
       </div>
-      <div class="example-button-row">
+      <div class="example-button-row" *ngIf="!authService.isSignedIn">
         <button mat-flat-button (click)="logInOnClick()">signin</button>
         <button mat-flat-button color="primary" (click)="signUpOnClick()">signup</button>
       </div>

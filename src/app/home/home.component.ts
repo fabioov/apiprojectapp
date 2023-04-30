@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import * as moment from 'moment';
 import { ViewChild, ElementRef } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 type Header = {
   '2. Symbol': string;
@@ -19,16 +23,28 @@ interface CompanyProfile {
   exchange: string;
 }
 
+interface StockData {
+  c: number;
+  d: string | null;
+  dp: number | null;
+  h: number;
+  l: number;
+  o: number;
+  pc: number;
+  t: number;
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('inputField', { static: false }) inputField!: ElementRef;
   title = 'stock-app';
   header: Header;
   data: { [key: string]: any };
+  dataSub: Subscription;
   companySearch: { [key: string]: any };
   daily: { [key: string]: any };
   date: string;
@@ -38,10 +54,15 @@ export class HomeComponent implements OnInit {
   isSearchActive = false;
   message: string = '';
   companyInfoData: CompanyProfile;
+  CompanyInfoDataSub: Subscription;
   showCard = false;
   showCalendar = false;
   selected: Date | null;
   progress = false;
+  profile: string;
+  symbolListSub: Subscription;
+  errorCatch: any;
+  noProfileData: boolean = false;
 
   constructor(
     public dataService: DataService // add SymbolSearchService dependency
@@ -54,6 +75,8 @@ export class HomeComponent implements OnInit {
     this.showCard = true;
     this.showCalendar = false;
     this.progress = true;
+    this.noProfileData = false;
+
 
     const inputValue = this.inputField.nativeElement.value.replace(/\s/g, '');
     const compTick = inputValue.split('-');
@@ -61,61 +84,77 @@ export class HomeComponent implements OnInit {
     if (inputValue) {
       this.symbol = compTick[0];
       // You can also pass it to a method in your DataService to fetch data for that symbol
-      this.dataService.getCompanyProfile(this.symbol).subscribe({
-        next: (profile: any) => {
-          console.log('Received Company Profile data:', profile);
-          this.handleProfile(profile);
-          this.progress = false;
-        },
-
-        error: (error: any) => {
-          console.log('Error', error);
-          this.progress = false;
-        },
-      });
-
-      this.dataService.getStockPrices(this.symbol).subscribe({
-        next: (prices: any) => {
-          console.log('Received Stock data:', prices);
-          this.handleStockPrices(prices);
-          this.progress = false;
-        },
-        error: (error: any) => {
-          console.log('Error', error);
-          this.progress = false;
-        },
-      });
       debugger;
+      this.CompanyInfoDataSub = this.dataService
+        .getCompanyProfile(this.symbol)
+        .subscribe({
+          next: (profile: any) => {
+            this.handleProfile(profile);
+            this.progress = false;
+          },
+
+          error: (error: HttpErrorResponse) => {
+            this.handleProfileError();
+            this.progress = false;
+          },
+        });
+
+      // this.dataSub = this.dataService.getStockPrices(this.symbol).subscribe({
+      //   next: (prices: any) => {
+      //     this.handleStockPrices(prices);
+      //     this.progress = false;
+      //   },
+      //   error: (error: HttpErrorResponse) => {
+      //     this.handleStockPricesError();
+      //     this.progress = false;
+      //   },
+      // });
     }
   }
 
-  handleProfile(result: any) {
-    this.companyInfoData = result;
-    console.log('This is the test for Profile data', this.companyInfoData);
-    debugger;
-  }
-
-  handleStockPrices(result: any) {
-    this.data = result['Time Series (Daily)'];
-    const date = this.selected;
-    debugger;
-    const dateFormatted = moment(this.selected).format('YYYY-MM-DD');
-    this.daily = this.data[dateFormatted];
-    this.date = moment(dateFormatted).format('DD-MM-YYYY');
-    this.header = result['Meta Data'];
-    console.log('This is the data: ', this.data);
-    console.log('This is the header: ', this.header);
-    if (this.daily === undefined) {
-      this.message = `This set of data does not contain the date ${this.date}!`;
+  handleProfile(profile: any) {
+    this.companyInfoData = profile;
+debugger;
+const entries = Object.entries(this.companyInfoData);
+    if (entries.length === 0) {
+      this.message = `Data not found.`;
     } else {
-      this.message = `Open: US$ ${this.daily['1. open']}<br>
-                 High: US$ ${this.daily['2. high']}<br>
-                 Low: US$ ${this.daily['3. low']}<br>
-                 Close: US$ ${this.daily['4. close']}`;
+      this.message = `Country: ${this.companyInfoData['country']}<br>
+                    Currency: ${this.companyInfoData['currency']}<br>
+                    Name: ${this.companyInfoData['name']}<br>
+                    Ticker: ${this.companyInfoData['ticker']}
+                    Web Site: ${this.companyInfoData['weburl']}`;
     }
   }
+
+  handleProfileError() {
+    debugger;
+    this.companyInfoData = {} as CompanyProfile;
+    this.errorCatch = this.dataService.getErrorCatch();
+    if (this.errorCatch.status !== 200 || this.companyInfoData === undefined) {
+      this.noProfileData = true; 
+      this.message = `You do not have access to this company.`;
+    }
+  }
+
+  // handleStockPrices(result: any) {
+  //   this.data = result as StockData;
+
+  //   this.message = `Open: US$ ${this.data['o']}<br>
+  //                   High: US$ ${this.data['h']}<br>
+  //                   Low: US$ ${this.data['l']}<br>
+  //                   Close: US$ ${this.data['c']}`;
+  // }
+
+  // handleStockPricesError() {
+  //   this.errorCatch = this.dataService.getErrorCatch();
+  //   if (this.errorCatch.status !== 200) {
+  //     this.message = `This company does not contain profile data.`;
+  //   }
+  // }
 
   onKeyUp(companyName: any) {
+    this.progress = true;
     this.showCard = false;
     this.showCalendar = false;
     if (!companyName.target.value) {
@@ -127,23 +166,31 @@ export class HomeComponent implements OnInit {
 
       // this.dataService.getCompany(this.searchQuery).subscribe((search: any) => {
       //   console.log('Received data:', search);
-      this.dataService
+      this.symbolListSub = this.dataService
         .getSymbolList(this.searchQuery)
         .subscribe((search: any) => {
           console.log('Received Symbol data:', search);
           this.companyTicker = search['result'];
+          this.progress = false;
         });
     }
   }
 
   onResultBoxClick(item: any) {
     this.showCalendar = true;
-    this.companyInfoData = item;
+    this.showCard = false;
+    // this.companyInfoData = item;
     console.log(this.companyInfoData);
     const searchInput = document.querySelector(
       '.searchInput input'
     ) as HTMLInputElement;
     searchInput.value = `${item['displaySymbol']} - ${item['description']}`;
     this.isSearchActive = false;
+  }
+
+  ngOnDestroy(): void {
+    this.CompanyInfoDataSub.unsubscribe();
+    this.dataSub.unsubscribe();
+    this.symbolListSub.unsubscribe();
   }
 }

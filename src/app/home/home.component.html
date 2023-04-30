@@ -32,8 +32,9 @@
   </div> -->
   <div *ngIf="showCard && !isSearchActive" class="card">
     <mat-card class="image-card">
+      <ng-container *ngIf="noProfileData === false">
       <mat-card-header>
-        <div mat-card-avatar class="header-image-avatar">
+         <div mat-card-avatar class="header-image-avatar">
           <img
             class="img"
             mat-card-image
@@ -49,27 +50,16 @@
           companyInfoData["ticker"]
         }}</mat-card-subtitle>
       </mat-card-header>
+    </ng-container>
+    <!-- Display message if companyInfoData is empty -->
+<div *ngIf="noProfileData === true">
+  <p [innerHTML]="message"></p>
+</div>
+    <ng-container *ngIf="noProfileData === false">
       <mat-card-content>
-        <p>
-          {{ companyInfoData['country'] }}
-        </p>
-        <p>
-          {{ companyInfoData['exchange'] }}
-        </p>
-        <p>
-          Currency: {{ companyInfoData['currency'] }}
-        </p>
-        <p>
-          IPO: {{ companyInfoData['ipo'] }}
-        </p>
-        <p>
-          <a href="{{ companyInfoData['weburl'] }}" >{{ companyInfoData['weburl'] }}</a>
-        </p>
-        <p>
-          <ng-container>
-            <p [innerHTML]="message"></p>
-          </ng-container></p
-      ></mat-card-content>
+        <p [innerHTML]="message"></p>
+      </mat-card-content>
+    </ng-container>
     </mat-card>
   </div>
 </div>

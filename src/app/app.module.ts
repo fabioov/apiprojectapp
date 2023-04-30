@@ -20,6 +20,8 @@ import { MyDialogComponent } from './my-dialog/my-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 
 
@@ -43,7 +45,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatDialogModule,
     MatFormFieldModule,
     MatProgressBarModule,
-    MatIconModule
+    MatIconModule,
+    ReactiveFormsModule,
+    MatInputModule
   ],
   providers: [
     DataService,

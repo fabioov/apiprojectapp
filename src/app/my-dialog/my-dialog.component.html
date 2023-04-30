@@ -7,20 +7,23 @@
       <mat-card-content>
         <mat-form-field class="example-full-width my-input">
           <span class="far fa-user p-2"></span>
-          <input matInput placeholder="Username" />
+          <input matInput [formControl]="usernameControl" required/>
+          <mat-error *ngIf="usernameControl.hasError('required')">Username is required</mat-error>
         </mat-form-field>
         <mat-form-field class="example-full-width my-input">
           <span class="fas fa-lock px-2"></span>
-          <input matInput placeholder="Password" />
+          <input matInput [formControl]="passwordControl" required />
+          <mat-error *ngIf="passwordControl.hasError('required')">Password is required</mat-error>
         </mat-form-field>
         <ng-container *ngIf="isSignUp">
         <mat-form-field  class="example-full-width my-input">
           <span class="fas fa-lock px-2"></span>
-          <input matInput placeholder="Confirm Password" />
+          <input matInput [formControl]="confirmPassControl" required />
+          <mat-error *ngIf="confirmPassControl.hasError('required')">Password confirmation is required</mat-error>
         </mat-form-field>
       </ng-container>
       </mat-card-content>
-      <button mat-stroked-button color="primary" class="custom-btn">
+      <button mat-stroked-button color="primary" class="custom-btn" (click)="isSignUp ? onSignUpClick() : onLogInClick()">
         {{ isSignUp ? 'Sign Up' : 'Log In' }}
       </button>
     </form>
