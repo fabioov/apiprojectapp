@@ -3,8 +3,9 @@ import { Auth } from '@angular/fire/auth';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth.service';
 import { Router } from '@angular/router';
-import { HotToastService } from '@ngneat/hot-toast';
-
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { catchError, map, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toast: HotToastService
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {}
@@ -38,18 +39,23 @@ export class LoginComponent implements OnInit {
     if (!this.loginForm.valid || !email || !password) {
       return;
     }
-    
+    debugger;
     this.authService
+
       .login(email, password)
       .pipe(
-        this.toast.observe({
-          success: 'Logged in successfully',
-          loading: 'Logging in...',
-          error: (e) => 'There was an error' + ' ' + e
+        tap(() => {
+          this.toast.success('Logged in successfully');
+          this.router.navigate(['home']);
+        }),
+        catchError((error) => {
+          this.toast.error('User or password invalid.', 'Try again!');
+          return of(null);
         })
       )
       .subscribe(() => {
-        this.router.navigate(['']);
+        // Handle success
+        this.router.navigate(['login']);
       });
   }
 }

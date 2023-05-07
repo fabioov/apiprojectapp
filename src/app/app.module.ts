@@ -31,6 +31,7 @@ import { LandingComponent } from './components/landing/landing.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -66,7 +67,16 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
     MatSnackBarModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    MatToolbarModule
+    MatToolbarModule,
+    ToastrModule.forRoot(
+      {
+      timeOut: 3500,
+      positionClass: 'toast-bottom-center',
+      preventDuplicates: true,
+      tapToDismiss: true,
+      progressBar: true,
+      }
+    )
 
   ],
   providers: [
