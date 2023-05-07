@@ -4,7 +4,11 @@
 />
 
 <div class="container">
-  <div class="searchInput" [class.active]="isSearchActive">
+  <div
+    class="searchInput"
+    [class.active]="isSearchActive"
+    *ngIf="authService.isSignedIn"
+  >
     <input
       type="text"
       placeholder="What stock are you looking for?"
@@ -24,6 +28,24 @@
     <div class="icon" (click)="onButtonClick($event)">
       <i class="fas fa-search"></i>
     </div>
+  </div>
+  <div class="searchInputOff card-container" *ngIf="!authService.isSignedIn">
+    <mat-card>
+      <mat-card-header>
+        <p>Sign in to unlock our features!</p>
+      </mat-card-header>
+      <mat-card-content>
+        <img
+        class="img"
+        mat-card-image
+        src="/assets/img/business_pic_front.jpeg"
+        alt="Angular material Card"
+      />
+      </mat-card-content>
+      <div class="example-button-row" *ngIf="!authService.isSignedIn">
+        <button mat-flat-button (click)="openDialogForLogin()">signin</button>
+      </div>
+    </mat-card>
   </div>
   <!-- <div *ngIf="showCalendar"class="calendar">
     <mat-card class="demo-inline-calendar-card">
@@ -71,14 +93,11 @@
         </div>
       </mat-card-content>
     </mat-card>
-    
   </div>
   <div>
     <mat-card *ngFor="let oneNews of news" class="newsCard">
       <mat-card-header>
-        <mat-card-title>
-          {{ oneNews["headline"] }} </mat-card-title
-        ><br />
+        <mat-card-title> {{ oneNews["headline"] }} </mat-card-title><br />
         <mat-card-subtitle>
           {{ oneNews["summary"] }}
         </mat-card-subtitle>
@@ -99,3 +118,5 @@
     </mat-card>
   </div>
 </div>
+
+

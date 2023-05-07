@@ -1,7 +1,6 @@
-<div class="container">
+<!-- <div class="container">
 
   <header>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
       <div class="container-fluid">
         <button
@@ -46,11 +45,30 @@
       <div class="example-button-row" *ngIf="!authService.isSignedIn">
         <button mat-flat-button (click)="logInOnClick()">signin</button>
         <button mat-flat-button color="primary" (click)="signUpOnClick()">signup</button>
+        <button mat-flat-button color="primary" routerLink="login">Route</button>
       </div>
     </nav>
 
   </header>
 
-     <router-outlet></router-outlet>
+</div> -->
 
+<mat-toolbar class="toolbar">
+  Firebase Authentication App
+  <div class="buttons">
+    <button mat-button routerLink="landing">
+      <mat-icon>login</mat-icon>signin
+    </button>
+    <button mat-button routerLink="sign-up">
+      <mat-icon>co_present</mat-icon>signup
+    </button>
+    <button mat-button routerLink="login" color="accent">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  </div>
+</mat-toolbar>
+
+<div class="content">
+  <router-outlet></router-outlet>
 </div>

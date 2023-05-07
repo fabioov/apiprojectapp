@@ -1,11 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  Inject,
+} from '@angular/core';
 import { DataService } from '../data.service';
-import * as moment from 'moment';
-import { ViewChild, ElementRef } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-import { Subscription } from 'rxjs';
+import { throwError, Subscription } from 'rxjs';
+import { AuthService } from '../auth.service';
+import { AppComponent } from '../app.component';
+import * as auth from 'firebase/auth';
 
 type Header = {
   '2. Symbol': string;
@@ -39,7 +46,7 @@ interface StockData {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
   @ViewChild('inputField', { static: false }) inputField!: ElementRef;
   title = 'stock-app';
   header: Header;
@@ -68,7 +75,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   newsDataSub: Subscription;
 
   constructor(
-    public dataService: DataService // add SymbolSearchService dependency
+    public dataService: DataService,
+    public authService: AuthService,
+    private appComponent: AppComponent
   ) {}
 
   ngOnInit(): void {}
@@ -224,13 +233,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isSearchActive = false;
   }
 
-  ngOnDestroy(): void {
-    this.CompanyInfoDataSub.unsubscribe();
-    this.dataSub.unsubscribe();
-    this.symbolListSub.unsubscribe();
-  }
+  // ngOnDestroy(): void {
+  //   this.CompanyInfoDataSub.unsubscribe();
+  //   this.dataSub.unsubscribe();
+  //   this.symbolListSub.unsubscribe();
+  // }
 
   onImageError(event: any) {
     event.target.src = '/assets/img/Financial Pic.jpeg';
+  }
+
+  openDialogForLogin() {
+    this.appComponent.openDialog();
   }
 }
