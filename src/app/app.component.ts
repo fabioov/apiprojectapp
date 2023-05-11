@@ -1,13 +1,8 @@
 import { Component, OnInit, Inject, NgZone } from '@angular/core';
-import { DataService } from './data.service';
-import { AuthService } from './auth.service';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { MyDialogComponent } from './my-dialog/my-dialog.component';
-import { HotToastService } from '@ngneat/hot-toast';
+import { DataService } from 'src/app/services/data.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Route, Router } from '@angular/router';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 
 
@@ -29,7 +24,7 @@ export class AppComponent {
   isSignUp: boolean = false;
   isSignedIn: boolean = false;
 
-  constructor(private dataService: DataService, public authService: AuthService, public dialog: MatDialog, private toast: HotToastService) {
+  constructor(private dataService: DataService, public authService: AuthService, private toast: ToastrService, private router: Router) {
 
   }
 
@@ -37,36 +32,31 @@ export class AppComponent {
 
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(MyDialogComponent, {
-      width: '500px',
-      data: { isSignUp:   this.isSignUp,
-              isSignedIn: this.isSignedIn }
-    });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('The dialog was closed');
-    });
-  }
+
 
   logInOnClick() {
     this.isSignUp = false;
     console.log('LogIn button working fine!');
-    this.openDialog();
+
   }
 
   signUpOnClick() {
     this.isSignUp = true;
     debugger;
 
-    this.openDialog();
 
   }
 
   signOutOnClick() {
-debugger
-console.log("button");
-    this.authService.isSignedIn = false;
+
     
+  }
+
+  logout(){
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['landing']);
+      this.toast.info('You have logged out.', 'Come back soon!')
+    })
   }
 }

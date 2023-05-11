@@ -6,11 +6,11 @@ import {
   ElementRef,
   Inject,
 } from '@angular/core';
-import { DataService } from '../data.service';
+import { DataService } from 'src/app/services/data.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { throwError, Subscription } from 'rxjs';
-import { AuthService } from '../auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { AppComponent } from '../app.component';
 import * as auth from 'firebase/auth';
 
@@ -47,6 +47,8 @@ interface StockData {
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+
+  user$ = this.authService.currentUser$;
   @ViewChild('inputField', { static: false }) inputField!: ElementRef;
   title = 'stock-app';
   header: Header;
@@ -244,6 +246,6 @@ export class HomeComponent implements OnInit {
   }
 
   openDialogForLogin() {
-    this.appComponent.openDialog();
+
   }
 }

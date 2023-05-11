@@ -4,10 +4,11 @@
 />
 
 <div class="container">
+  <h4 *ngIf="user$ | async as user">Welcome to our app, {{user.email}}!</h4>
   <div
     class="searchInput"
     [class.active]="isSearchActive"
-    *ngIf="authService.isSignedIn"
+    
   >
     <input
       type="text"
@@ -29,7 +30,7 @@
       <i class="fas fa-search"></i>
     </div>
   </div>
-  <div class="searchInputOff card-container" *ngIf="!authService.isSignedIn">
+  <div class="searchInputOff card-container">
     <mat-card>
       <mat-card-header>
         <p>Sign in to unlock our features!</p>
@@ -42,7 +43,7 @@
         alt="Angular material Card"
       />
       </mat-card-content>
-      <div class="example-button-row" *ngIf="!authService.isSignedIn">
+      <div class="example-button-row">
         <button mat-flat-button (click)="openDialogForLogin()">signin</button>
       </div>
     </mat-card>

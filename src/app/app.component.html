@@ -56,16 +56,22 @@
 <mat-toolbar class="toolbar">
   Firebase Authentication App
   <div class="buttons">
-    <button mat-button routerLink="landing">
-      <mat-icon>login</mat-icon>signin
-    </button>
+    <ng-container *ngIf="authService.currentUser$ | async as user; else loginButton">
+      <button mat-button (click)="logout()" color="accent">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </ng-container>
+    <ng-template #loginButton>
+      <button mat-button routerLink="login">
+        <mat-icon>login</mat-icon>signin
+      </button>
+    </ng-template>
+    <!-- <ng-container *ngIf="authService.currentUser$ | async as user">
     <button mat-button routerLink="sign-up">
       <mat-icon>co_present</mat-icon>signup
     </button>
-    <button mat-button routerLink="login" color="accent">
-      <mat-icon>logout</mat-icon>
-      Logout
-    </button>
+  </ng-container> -->
   </div>
 </mat-toolbar>
 

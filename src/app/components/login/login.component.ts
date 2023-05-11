@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -39,14 +39,13 @@ export class LoginComponent implements OnInit {
     if (!this.loginForm.valid || !email || !password) {
       return;
     }
-    debugger;
     this.authService
 
       .login(email, password)
       .pipe(
         tap(() => {
           this.toast.success('Logged in successfully');
-          this.router.navigate(['home']);
+          this.router.navigate(['/home']);
         }),
         catchError((error) => {
           this.toast.error('User or password invalid.', 'Try again!');
@@ -55,7 +54,6 @@ export class LoginComponent implements OnInit {
       )
       .subscribe(() => {
         // Handle success
-        this.router.navigate(['login']);
       });
   }
 }
