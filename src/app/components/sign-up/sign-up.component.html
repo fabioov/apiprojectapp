@@ -16,17 +16,48 @@
         >Please, enter a correct email
       </mat-error>
     </mat-form-field>
+
+    <!-- Password Input -->
     <mat-form-field>
       <input
         matInput
         placeholder="Password"
         formControlName="password"
         type="password"
+        (input)="password?.markAsTouched()"
       />
-      <mat-error *ngIf="password?.errors?.['required']"
-        >Password is required
-      </mat-error>
     </mat-form-field>
+    <div class="passRequiredBox">
+    <mat-error
+      *ngIf="password?.errors?.['required'] && password?.touched && password?.dirty"
+    >
+      Password is required
+    </mat-error>
+  </div>
+    <div
+      class="error-box"
+      *ngIf="password?.errors && (password?.touched || password?.dirty)"
+    >
+      <mat-error *ngIf="password?.errors?.['minLength']">
+        {{ password?.errors?.['minLength'] }}
+      </mat-error>
+      <mat-error *ngIf="password?.errors?.['hasNumber']">
+        {{ password?.errors?.['hasNumber'] }}
+      </mat-error>
+      <mat-error *ngIf="password?.errors?.['hasLetter']">
+        {{ password?.errors?.['hasLetter'] }}
+      </mat-error>
+      <mat-error *ngIf="password?.errors?.['hasSymbol']">
+        {{ password?.errors?.['hasSymbol'] }}
+      </mat-error>
+    </div>
+
+    <div class="passwordCheck" *ngIf="!password?.errors">
+      <p>
+        <mat-icon>done</mat-icon>Valid Password
+      </p>
+    </div>
+
     <mat-form-field>
       <input
         matInput
@@ -38,9 +69,11 @@
         >Confirm password is required.
       </mat-error>
     </mat-form-field>
+
     <mat-error *ngIf="signUpForm.errors?.['passwordsDontMatch']">
       Passwords should match.
     </mat-error>
+
     <div class="center margin-top">
       <button mat-raised-button color="primary" type="submit">Sign Up!</button>
     </div>
